@@ -1,0 +1,37 @@
+.panel.panel-info
+  .panel-heading
+    h1
+      = concept("thing/cell/decorator", @thing).(:thumb)
+      = @thing.name
+      small< = link_to "Edit", edit_thing_path(@thing)
+  .panel-body
+    p = @thing.description
+  .panel-footer
+    - @thing.users.each do |user|
+      span> = user.email
+
+
+.panel.panel-default
+  .panel-body
+    = simple_form_for @form, url: create_comment_thing_path(@thing) do |f|
+      
+      = f.error_notification
+
+      = f.input :body
+      = f.collection_radio_buttons :weight, *@form.weights, 
+                                   item_wrapper_class: :radio,
+                                   item_wrapper_tag: :div
+
+      = f.simple_fields_for :user do |ff|
+        = ff.input :email
+
+      = f.button :submit
+
+.panel.panel-default
+  .panel-body
+    h3 
+      span> = @thing.comments.size
+      span> comments
+
+    /= concept "comment/cell", collection: @thing.comments.limit(10)
+    = concept "comment/cell/grid", @thing
